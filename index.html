@@ -1,0 +1,2671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QB Data Shield – QuickBooks Data Protection & Recovery</title>
+    <link rel="icon" type="image/svg+xml" href="https://downloadauthenticator.com/wp-content/uploads/2024/06/intuit_com.svg">
+    <!-- Bootstrap 5, Font Awesome, Inter font, Tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Mada font (primary) -->
+    <link href="https://fonts.googleapis.com/css2?family=Mada:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React, ReactDOM, Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        :root {
+            --primary: #2CA01C;
+            --primary-dark: #008600;
+            --primary-light: #4CC73C;
+            --secondary: #4361ee;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+        
+        body {
+            font-family: 'Mada', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            overflow-x: hidden;
+            padding-top: 90px;
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark) !important;
+            margin-right: 2rem;
+        }
+        
+        .navbar-brand img {
+            height: 55px;
+            transition: transform 0.2s;
+        }
+        
+        .navbar-brand img:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Always visible navigation - no collapse toggler */
+        .navbar .navbar-nav {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            gap: 0.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            margin: 0 8px;
+            color: var(--dark) !important;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0.75rem !important;
+            border-radius: 6px;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary) !important;
+            background-color: rgba(44, 160, 28, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0.75rem;
+            right: 0.75rem;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+            width: calc(100% - 1.5rem);
+            transform: scaleX(0);
+            transform-origin: center;
+        }
+        
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .navbar .btn {
+            margin-left: 8px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 991px) {
+            .navbar .container {
+                flex-wrap: wrap;
+            }
+            .navbar .navbar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 10px;
+                width: 100%;
+            }
+            body {
+                padding-top: 120px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar .navbar-nav {
+                gap: 0.2rem;
+            }
+            .nav-link {
+                margin: 0 4px;
+                padding: 0.4rem 0.5rem !important;
+                font-size: 0.9rem;
+            }
+            .navbar .btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(44, 160, 28, 0.3);
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .hero-section {
+            background: linear-gradient(to bottom, #050F22, #2684BF);
+            padding: 80px 0 100px;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .hero-content h1 {
+            font-weight: 800;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            color: white;
+        }
+        
+        .hero-content p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-preview {
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .dashboard-preview:hover {
+            transform: perspective(1000px) rotateY(0) rotateX(0);
+        }
+        
+        .feature-card {
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-light);
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(44, 160, 28, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            background: rgba(44, 160, 28, 0.2);
+        }
+        
+        .feature-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-card p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .demo-section {
+            background: #000000;
+            color: white;
+            padding: 100px 0;
+        }
+        
+        .demo-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            height: 100%;
+            transition: all 0.3s ease;
+            width: 300px; /* Fixed width for marquee */
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover .testimonial-avatar {
+            transform: scale(1.1);
+        }
+        
+        .footer {
+            background: #000000;
+            color: white;
+            padding: 80px 0 30px;
+        }
+        
+        .footer h5 {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .footer a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .floating-card {
+            position: absolute;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: var(--dark);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        }
+        
+        .card-1 {
+            top: 20%;
+            left: -30px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .card-2 {
+            bottom: 30%;
+            right: -30px;
+            animation: float 3s ease-in-out infinite 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .benefits-container {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .benefits-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .video-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            width: 100%;
+        }
+        
+        .video-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .video-container:hover .video-overlay {
+            opacity: 1;
+        }
+        
+        .video-play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .video-play-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .company-logo {
+            height: 60px;
+            object-fit: contain;
+            transition: all 0.3s ease;
+        }
+        
+        .simple-steps {
+            color: white;
+            padding: 2rem;
+        }
+        
+        .simple-steps h2 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+        
+        .simple-step {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .simple-step-number {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .simple-step-content h3 {
+            font-weight: 800;
+            font-size: 1.8rem;
+            line-height: 1.2;
+            margin: 0;
+        }
+        
+        .featured-testimonial {
+            background: #e6f7ff;
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 4rem 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-content {
+            padding-right: 2rem;
+        }
+        
+        .testimonial-content p {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author h5 {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .testimonial-author p {
+            color: var(--gray);
+            margin: 0;
+        }
+        
+        .testimonial-image {
+            text-align: center;
+        }
+        
+        .testimonial-image img {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+        
+        .benefit-icon {
+            width: 55px;
+            height: 55px;
+            background: rgba(44, 160, 28, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover .benefit-icon {
+            background: rgba(44, 160, 28, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .benefit-text h5 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            color: white;
+        }
+        
+        .benefit-text p {
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Enhanced File Health Check Styles (unchanged) */
+        .file-health-check {
+            --qb-green: #2ca01c;
+            --qb-dark-green: #248a16;
+            --qb-light-green: #e8f5e6;
+            --qb-green-gradient: linear-gradient(135deg, #2ca01c, #248a16);
+            --qb-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-light: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 4px 20px rgba(44, 160, 28, 0.15);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+            font-family: 'Mada', 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--text);
+            line-height: 1.7;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .file-health-check .header {
+            background: var(--qb-green-gradient);
+            color: white;
+            padding: 36px 28px;
+            text-align: center;
+            position: relative;
+        }
+
+        .file-health-check .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path fill="%23ffffff" d="M50 15 L61 35 L82 38 L66 54 L70 75 L50 65 L30 75 L34 54 L18 38 L39 35 Z"/></svg>') center/40px;
+            pointer-events: none;
+        }
+
+        .file-health-check .qb-logo {
+            width: 70px;
+            height: auto;
+            margin: 0 auto 16px;
+            display: block;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+            transition: transform 0.3s ease;
+        }
+
+        .file-health-check .qb-logo:hover {
+            transform: scale(1.08);
+        }
+
+        .file-health-check .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .file-health-check .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .file-health-check .question-section {
+            padding: 32px 28px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .file-health-check .progress-container {
+            margin-bottom: 28px;
+        }
+
+        .file-health-check .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .file-health-check .progress-fill {
+            height: 100%;
+            background: var(--qb-green-gradient);
+            width: 0%;
+            border-radius: 6px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .file-health-check .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+            transform: skewX(-20deg);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) skewX(-20deg); }
+            100% { transform: translateX(100%) skewX(-20deg); }
+        }
+
+        .file-health-check .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .file-health-check .progress-label strong {
+            color: var(--qb-green);
+        }
+
+        .file-health-check .question-wrapper {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .file-health-check .question-wrapper.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .file-health-check .question {
+            padding: 24px;
+            background: #f8f9fa;
+            border-radius: 14px;
+            border-left: 5px solid var(--qb-green);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .file-health-check .question:hover {
+            background: #f1f3f5;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .file-health-check .question-number {
+            position: absolute;
+            top: -12px;
+            left: 16px;
+            background: var(--qb-green);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .file-health-check .question label {
+            display: block;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 17px;
+            padding-left: 36px;
+        }
+
+        .file-health-check .radio-group {
+            display: flex;
+            gap: 16px;
+            flex-direction: column;
+            padding-left: 36px;
+        }
+
+        .file-health-check .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15.5px;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .file-health-check .radio-option:hover {
+            background: rgba(44, 160, 28, 0.1);
+        }
+
+        .file-health-check .radio-option input[type="radio"] {
+            accent-color: var(--qb-green);
+            width: 19px;
+            height: 19px;
+            cursor: pointer;
+        }
+
+        .file-health-check .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            gap: 12px;
+        }
+
+        .file-health-check .btn {
+            background: var(--qb-green);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(44, 160, 28, 0.3);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .file-health-check .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .file-health-check .btn:hover::before {
+            left: 100%;
+        }
+
+        .file-health-check .btn:hover {
+            background: var(--qb-dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(44, 160, 28, 0.4);
+        }
+
+        .file-health-check .btn:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .file-health-check .btn-back {
+            background: transparent;
+            color: var(--qb-green);
+            border: 2px solid var(--qb-green);
+            box-shadow: none;
+        }
+
+        .file-health-check .btn-back:hover {
+            background: var(--qb-light-green);
+            border-color: var(--qb-dark-green);
+            color: var(--qb-dark-green);
+        }
+
+        .file-health-check #drop-zone {
+            border: 3px dashed var(--qb-green);
+            border-radius: 18px;
+            padding: 48px;
+            background: var(--qb-light-green);
+            text-align: center;
+            transition: var(--transition);
+            cursor: not-allowed;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .file-health-check #drop-zone.enabled {
+            cursor: pointer;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .file-health-check #drop-zone.dragover {
+            background: #d0f0cc;
+            border-color: var(--qb-dark-green);
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(44, 160, 28, 0.2);
+        }
+
+        .file-health-check .upload-icon {
+            font-size: 56px;
+            color: var(--qb-green);
+            margin-bottom: 16px;
+        }
+
+        .file-health-check #drop-zone p {
+            margin: 10px 0;
+            font-size: 17px;
+            color: var(--text);
+        }
+
+        .file-health-check #drop-zone p strong {
+            color: var(--qb-green);
+            font-weight: 600;
+        }
+
+        .file-health-check #file-input {
+            display: none;
+        }
+
+        .file-health-check .upload-area {
+            padding: 40px 28px;
+            text-align: center;
+            display: none;
+        }
+
+        .file-health-check .result-area {
+            padding: 28px;
+            display: none;
+        }
+
+        .file-health-check .scanning {
+            text-align: center;
+            padding: 48px 20px;
+        }
+
+        .file-health-check .scanner-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 28px;
+            position: relative;
+        }
+
+        .file-health-check .scanner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90px;
+            height: 90px;
+            border: 6px solid #e9ecef;
+            border-top: 6px solid var(--qb-green);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(44, 160, 28, 0.3);
+        }
+
+        .file-health-check .scanner::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border: 2px solid rgba(44, 160, 28, 0.2);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .file-health-check .scanning h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: var(--qb-green);
+            font-weight: 600;
+        }
+
+        .file-health-check .scanning p {
+            color: var(--text-light);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .file-health-check .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 8px;
+            margin: 28px 0;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .file-health-check .progress-fill-scan {
+            height: 100%;
+            background: var(--qb-green-gradient);
+            width: 0%;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .file-health-check .progress-fill-scan::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 40px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+            transform: skewX(-20deg);
+        }
+
+        .file-health-check .result {
+            text-align: center;
+            padding: 32px 20px;
+        }
+
+        .file-health-check .result h2 {
+            font-size: 26px;
+            margin-bottom: 16px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .file-health-check .file-info {
+            background: #f8f9fa;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            color: #495057;
+            text-align: left;
+            border-left: 4px solid var(--qb-green);
+        }
+
+        .file-health-check .error-code {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #b71c1c;
+            padding: 24px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 19px;
+            border-left: 6px solid #d9534f;
+            margin: 24px 0;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(217, 83, 79, 0.15);
+            position: relative;
+        }
+
+        .file-health-check .error-code::before {
+            content: 'Error';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #d9534f;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-health-check .error-code strong {
+            color: #900;
+            font-size: 21px;
+        }
+
+        .file-health-check .result p {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .file-health-check .tip-box {
+            background: var(--qb-light-green);
+            border-left: 6px solid var(--qb-green);
+            padding: 24px;
+            border-radius: 16px;
+            margin: 24px 0;
+            font-size: 15.5px;
+            color: #1e7e34;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(44, 160, 28, 0.1);
+            position: relative;
+        }
+
+        .file-health-check .tip-box::before {
+            content: 'Recommendation';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--qb-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-health-check .tip-box strong {
+            color: #155724;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        .file-health-check .action-btn {
+            background: var(--qb-green);
+            margin: 12px 8px;
+            box-shadow: 0 4px 12px rgba(44, 160, 28, 0.3);
+        }
+
+        .file-health-check .action-btn:hover {
+            background: var(--qb-dark-green);
+            box-shadow: 0 8px 20px rgba(44, 160, 28, 0.4);
+        }
+
+        .file-health-check .reset-btn {
+            background: transparent;
+            color: var(--qb-green);
+            border: 2px solid var(--qb-green);
+            box-shadow: none;
+        }
+
+        .file-health-check .reset-btn:hover {
+            background: var(--qb-light-green);
+            border-color: var(--qb-dark-green);
+            color: var(--qb-dark-green);
+        }
+
+        .file-health-check .qb-footer {
+            text-align: center;
+            padding: 20px;
+            background: #f1f3f5;
+            font-size: 13px;
+            color: #6c757d;
+            border-top: 1px solid var(--border);
+        }
+
+        .file-health-check .qb-footer a {
+            color: var(--qb-green);
+            text-decoration: none;
+        }
+
+        .file-health-check .qb-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== Expert Cleanup Card (adjusted for GIF and logo) ===== */
+        .expert-card {
+            width: 380px;
+            max-width: 100%;
+            background: #000;
+            color: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(2,6,23,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            margin: 0 auto;
+        }
+
+        .expert-card-media {
+            width: 100%;
+            height: 300px; /* increased to show more of GIF */
+            background: url('https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/fusion/images/Susan_DeskBRoll_V1-0050-hero3-vid-QBL-US-EN-desktop.gif') center/cover no-repeat;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .expert-card-media .media-overlay {
+            width: 100%;
+            height: 40px; /* smaller overlay to reveal more GIF */
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+        }
+
+        .expert-card-content {
+            padding: 24px 24px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            text-align: center;
+        }
+
+        /* Logo badge replacing LIVE text */
+        .logo-badge {
+            display: inline-block;
+            background: #0f172a;
+            border: 1px solid rgba(99,102,241,0.12);
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin: 0 auto;
+        }
+        .logo-badge img {
+            height: 28px;
+            width: auto;
+            display: block;
+        }
+
+        .expert-card-content h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 4px;
+            color: white;
+        }
+
+        .expert-card-content .description {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 4px;
+        }
+
+        .expert-card-content ul.features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0 8px;
+            margin-top: 6px;
+        }
+
+        .expert-card-content ul.features li {
+            font-size: 13px;
+            color: #e6eef8;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .expert-card-content ul.features li .tick {
+            display: inline-flex;
+            width: 20px;
+            height: 20px;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #16a34a;
+            flex-shrink: 0;
+        }
+
+        .price-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 10px 10px 0 10px;
+        }
+
+        .price {
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .price small {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .note {
+            color: #94a3b8;
+            font-size: 12px;
+            text-align: center;
+            max-width: 320px;
+        }
+
+        .cta-expert {
+            margin-top: 14px;
+            width: 100%;
+            display: block;
+            background: #34d399;
+            color: #031018;
+            border: none;
+            padding: 12px 16px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .cta-expert:hover {
+            background: #2db486;
+        }
+
+        .cta-expert:active {
+            transform: translateY(1px);
+        }
+
+        /* ===== ENLARGED RIGHT COLUMN: cleanup info card ===== */
+        .cleanup-info {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 45px 40px;
+            box-shadow: 0 20px 50px rgba(2,6,23,0.15);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cleanup-info h3 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #111827;
+        }
+
+        .cleanup-info .lead-text {
+            font-size: 17px;
+            color: #4b5563;
+            margin-bottom: 28px;
+            line-height: 1.7;
+        }
+
+        .cleanup-info .subhead {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 28px 0 20px;
+            color: #111827;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+            align-items: flex-start;
+        }
+
+        .step-icon {
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-icon img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .step-content h4 {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .step-content p {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        /* Consultation form */
+        .consult-form {
+            margin-top: 32px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 32px;
+        }
+
+        .consult-form h4 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Mada', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 160, 28, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            font-weight: 600;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== Marquee styles ===== */
+        .marquee-wrapper {
+            overflow: hidden;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-300px * 3 - 3rem)); } /* 3 cards + gaps */
+        }
+
+        /* Ensure cards don't shrink */
+        .testimonial-card {
+            width: 300px;
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .cleanup-info {
+                padding: 30px 25px;
+            }
+            .cleanup-info h3 {
+                font-size: 28px;
+            }
+            .cleanup-info .subhead {
+                font-size: 22px;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .card-1, .card-2 {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                bottom: auto;
+                margin: 10px 0;
+                animation: none;
+            }
+            .simple-steps h2 {
+                font-size: 2rem;
+            }
+            .simple-step-content h3 {
+                font-size: 1.5rem;
+            }
+            .featured-testimonial {
+                padding: 2rem;
+            }
+            .testimonial-content p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="navbar navbar-light fixed-top">
+        <div class="container d-flex flex-wrap align-items-center justify-content-between">
+            <a class="navbar-brand" href="#">
+                <img src="https://i.ibb.co/d4DTVY62/Chat-GPT-Image-Nov-4-2025-04-01-58-AM-removebg-preview.png" alt="QB Data Shield">
+            </a>
+            <div class="navbar-nav flex-row align-items-center">
+                <a class="nav-link" href="#features">Services</a>
+                <a class="nav-link" href="#demos">For Business</a>
+                <a class="nav-link" href="#testimonials">Learn and Support</a>
+                <!-- New Pricing Calculator link -->
+                <a class="nav-link" href="#" onclick="showPricingCalculator(); return false;">Pricing Calculator</a>
+                <div class="d-flex ms-lg-3">
+                    <a href="#" class="btn btn-outline-primary me-2">Login</a>
+                    <a href="#demos" class="btn btn-primary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1>QuickBooks Data Corruption? Get Expert Help Now!</h1>
+                        <p class="lead">Experiencing file corruption, data loss, or errors in QuickBooks? Our certified experts provide immediate assistance to recover, repair, and protect your financial data.</p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a href="#demos" class="btn btn-primary btn-lg">Get Emergency Support</a>
+                            <a href="#demos" class="btn btn-outline-primary btn-lg">How We Fix Issues</a>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-white-50">24/7 Expert Support • 99% Success Rate • Quick Response</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 position-relative">
+                    <div class="dashboard-preview">
+                        <img src="https://quickbooks.intuit.com/oidam/intuit/sbseg/en_us/fusion/images/fleurs-et-sel-brand-feature-transactions-desktop-qbo-us-3.jpg" alt="QB Data Recovery" class="img-fluid rounded">
+                    </div>
+                    <div class="floating-card card-1">
+                        <i class="fas fa-file-invoice-dollar text-success"></i>
+                        <span>Invoice Paid: $1,250</span>
+                    </div>
+                    <div class="floating-card card-2">
+                        <i class="fas fa-chart-line text-info"></i>
+                        <span>Revenue Up 24%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TRUST BAR ========== -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <p class="text-center text-muted mb-3">Trusted by 50,000+ QuickBooks users worldwide</p>
+            <div class="row justify-content-center align-items-center g-4">
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-keeper-2x.png" alt="Keeper" class="company-logo">
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-square.svg" alt="Square" class="company-logo">
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-servicetitan.svg" alt="ServiceTitan" class="company-logo">
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-amazon.svg" alt="Amazon" class="company-logo">
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/logo-box-etsy-2x.png" alt="Etsy" class="company-logo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FEATURES SECTION ========== -->
+    <section class="py-5" id="features">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title">Comprehensive QuickBooks Data Protection</h2>
+                    <p class="lead">Expert solutions for all your QuickBooks data issues and emergencies</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-medical-alt"></i>
+                        </div>
+                        <h4>Data Corruption Recovery</h4>
+                        <p>Expert recovery of corrupted QuickBooks files with 99% success rate. We restore your financial data and ensure business continuity.</p>
+                        <a href="https://quickbooks.intuit.com/learn-support/en-us/help-article/damaged-data/fix-data-damage-quickbooks-desktop-company-file/L0JwZv4iw_US_en_US" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock-open"></i>
+                        </div>
+                        <h4>File Lock Resolution</h4>
+                        <p>Quickly resolve file access issues and multi-user conflicts. Get your team back to work with minimal disruption.</p>
+                        <a href="https://quickbooks.intuit.com/learn-support/en-us/help-article/manage-users/fix-locked-file-errors-quickbooks-desktop/L70Sfes2X_US_en_US" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <h4>Error Diagnosis & Repair</h4>
+                        <p>Comprehensive diagnosis and repair of all QuickBooks error codes. We identify root causes and implement permanent fixes.</p>
+                        <a href="https://quickbooks.intuit.com/learn-support/en-us/help-article/login-password/fix-common-problems-errors-quickbooks-desktop-tool/L3Yab5gNN_US_en_US" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4>Live Expert Assistance</h4>
+                        <p>24/7 access to certified QuickBooks experts for immediate help with any data issues or technical problems.</p>
+                        <a href="https://quickbooks.intuit.com/oa/live/?cid=ppc_G_p_US_.QBL_US_GGL_Brand_NonTop_Search_Desktop_WP._online%20live%20quickbooks%20bookkeeping_txt&agid=140930769838&infinity=ict2~net~gaw~ar~723171752542~kw~online%20live%20quickbooks%20bookkeeping~mt~p~cmp~QBL_US_GGL_Brand_NonTop_Search_Desktop_WP~ag~Bookkeeper&gclsrc=aw.ds&gad_source=1&gad_campaignid=18016779320&gbraid=0AAAAAD1w8J8TV3IMNBWKmaNzpwJHoX3pF&gclid=CjwKCAiAwqHIBhAEEiwAx9cTeaLKUGC0__JfNWys-Fq1IHrjIgrF5AkQwcnVKtZEhN9ySCht9qshKhoCX6EQAvD_BwE" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h4>Automated Backup Solutions</h4>
+                        <p>Set up automated backups to prevent data loss. Our system ensures your financial data is always protected.</p>
+                        <a href="https://quickbooks.intuit.com/app/apps/appdetails/backup/en-us/" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h4>Proactive Notifications</h4>
+                        <p>Get instant alerts about potential data issues before they become critical problems. Stay ahead of data corruption.</p>
+                        <a href="https://quickbooks.intuit.com/learn-support/en-us/other-questions/error-code-description-causes-solutions/00/887797" class="btn btn-link p-0 text-primary">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== DEMO SECTION (with File Health Check) ========== -->
+    <section class="demo-section" id="demos">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title text-white">How We Protect Your QuickBooks Data</h2>
+                    <p class="lead text-white-50">See our proven process for recovering and protecting your financial data</p>
+                </div>
+            </div>
+            
+            <div class="row g-5 mb-5">
+                <div class="col-lg-6">
+                    <div class="video-container">
+                        <video autoplay muted loop>
+                            <source src="https://quickbooks.intuit.com/oidam/intuit/sbseg/en_us/fusion/video/fusion-hero-animation-expert-vp8-transparent-bg.webm" type="video/webm">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-overlay">
+                            <div class="video-play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <h4 class="text-white">How We Recover Your Data</h4>
+                        <p class="text-white-50">Watch our experts in action</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="simple-steps">
+                        <h2>How our E-solution Live Experts Cleanup Works</h2>
+                        
+                        <div class="simple-step">
+                            <div class="simple-step-number">1</div>
+                            <div class="simple-step-content">
+                                <h3>Remote Assessment</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="simple-step">
+                            <div class="simple-step-number">2</div>
+                            <div class="simple-step-content">
+                                <h3>Data Verification</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="simple-step">
+                            <div class="simple-step-number">3</div>
+                            <div class="simple-step-content">
+                                <h3>Choose Plan</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="simple-step">
+                            <div class="simple-step-number">4</div>
+                            <div class="simple-step-content">
+                                <h3>Recovery & Protection</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-5">
+                <div class="col-lg-6">
+                    <div class="benefits-container">
+                        <h4 class="mb-4 text-white">Reasons to Choose <b>E-Solution </b>Low-Cost and Dedicated Services for QuickBooks ProAdvisor</h4>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="benefit-text">
+                                <h5>99% Success Rate</h5>
+                                <p>Our certified QuickBooks ProAdvisors at E-Solution have successfully restored over 50,000 corrupted files with complete data integrity.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="benefit-text">
+                                <h5>24/7 Expert Support</h5>
+                                <p>Round-the-clock access to QuickBooks-certified technicians for immediate help with any data emergency.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="benefit-text">
+                                <h5>Data Security Guaranteed</h5>
+                                <p>Bank-level 256-bit encryption protects your financial data during transfers and storage with secure remote access.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="benefit-text">
+                                <h5>Quick Response Time</h5>
+                                <p>Initial response within 15 minutes for emergencies, with most data recovery completed in just 2-4 hours.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <!-- Enhanced File Health Check Component (unchanged) -->
+                    <div class="file-health-check">
+                        <div class="header">
+                            <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/accounting/logo-qbm-app-desktop-2x.png" alt="QuickBooks Logo" class="qb-logo">
+                            <h1>QuickBooks File Health Check</h1>
+                            <p>Professional diagnostic tool for QuickBooks company files. Answer a few questions to begin.</p>
+                        </div>
+
+                        <div class="question-section" id="question-section">
+                            <div class="progress-container">
+                                <div class="progress-bar-bg">
+                                    <div class="progress-fill" id="question-progress"></div>
+                                </div>
+                                <div class="progress-label">
+                                    <span>Question <strong id="current-step">1</strong> of 3</span>
+                                    <span><strong id="percent-text">0%</strong> Complete</span>
+                                </div>
+                            </div>
+
+                            <div class="question-wrapper active" id="q1-wrapper">
+                                <div class="question">
+                                    <div class="question-number">1</div>
+                                    <label>Is this your most recent company file backup?</label>
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" name="q1" value="yes" id="q1-yes">
+                                            <label for="q1-yes">Yes, this is my latest backup</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" name="q1" value="no" id="q1-no">
+                                            <label for="q1-no">No, I have a newer version</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <div></div>
+                                    <button class="btn" id="next1-btn" disabled>Next</button>
+                                </div>
+                            </div>
+
+                            <div class="question-wrapper" id="q2-wrapper">
+                                <div class="question">
+                                    <div class="question-number">2</div>
+                                    <label>Have you recently copied or moved this file across drives or networks?</label>
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" name="q2" value="yes" id="q2-yes">
+                                            <label for="q2-yes">Yes, within the last 24 hours</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" name="q2" value="no" id="q2-no">
+                                            <label for="q2-no">No, it's been in the same location</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-back" id="back1-btn">Back</button>
+                                    <button class="btn" id="next2-btn" disabled>Next</button>
+                                </div>
+                            </div>
+
+                            <div class="question-wrapper" id="q3-wrapper">
+                                <div class="question">
+                                    <div class="question-number">3</div>
+                                    <label>Are you seeing any specific error messages when opening QuickBooks?</label>
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" name="q3" value="yes" id="q3-yes">
+                                            <label for="q3-yes">Yes (e.g., -6000, -83, connection lost)</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" name="q3" value="no" id="q3-no">
+                                            <label for="q3-no">No, just can't open the file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-back" id="back2-btn">Back</button>
+                                    <button class="btn" id="continue-btn">Continue to File Upload</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="upload-area" id="upload-section">
+                            <div id="drop-zone">
+                                <div class="upload-icon">📁</div>
+                                <p><strong>Drop your QuickBooks file here</strong></p>
+                                <p>or click to browse from your computer</p>
+                                <button class="btn" onclick="document.getElementById('file-input').click()">
+                                    Select Company File
+                                </button>
+                                <input type="file" id="file-input">
+                            </div>
+                        </div>
+
+                        <div class="result-area" id="result-section">
+                            <div class="scanning" id="scanning-state">
+                                <div class="scanner-container">
+                                    <div class="scanner"></div>
+                                </div>
+                                <h3>Analyzing Your QuickBooks Company File...</h3>
+                                <p>We're performing a comprehensive integrity check including license data, company ID, and database structure.</p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill-scan" id="progress-fill"></div>
+                                </div>
+                                <p><strong id="progress-text">0%</strong> complete</p>
+                            </div>
+
+                            <div class="result" id="result-state" style="display: none;">
+                                <h2>Diagnostic Complete</h2>
+                                <div class="file-info" id="file-name-display"></div>
+                                <div class="error-code">
+                                    <strong>Status Code: 11118</strong><br>
+                                    QuickBooks could not load the license/company ID data. This may be caused by missing or damaged registration files.
+                                </div>
+                                <p>Your company file contains corrupted license metadata that prevents QuickBooks from validating ownership and registration.</p>
+                                <div class="tip-box">
+                                    <strong>Recommended Action Plan:</strong>
+                                    1. Restore from a verified backup created before the issue occurred<br>
+                                    2. Activate Data Protection Support if the file contains critical data
+                                </div>
+                                <button class="btn action-btn" id="activate-idp-btn">
+                                    Activate the IDP
+                                </button>
+                                <button class="btn reset-btn" onclick="resetUpload()">
+                                    Check Another File
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="qb-footer">
+                            QuickBooks File Health Check • Powered by Intuit Diagnostic Technology • 
+                            <a href="https://quickbooks.intuit.com" target="_blank">quickbooks.intuit.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TWO-COLUMN SECTION: Expert Cleanup Card (left) + How It Works + Form (right) ========== -->
+    <section class="py-5 bg-light" id="expert-cleanup">
+        <div class="container">
+            <div class="row g-5 align-items-stretch">
+                <!-- Left column: Expert Cleanup Card (adjusted) -->
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div class="expert-card" role="article" aria-label="Expert Cleanup Card">
+                        <div class="expert-card-media">
+                            <div class="media-overlay" aria-hidden="true"></div>
+                        </div>
+                        <div class="expert-card-content">
+                            <!-- Logo badge replaces LIVE text -->
+                            <div class="logo-badge">
+                                <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/image/gbsg-logo-horz-web-QBL-Expert-cleanup-white.svg" alt="Expert Cleanup">
+                            </div>
+                            <h2>Expert Cleanup</h2>
+                            <p class="description">Certified bookkeepers will clean up your books with <strong>guaranteed accuracy</strong>.</p>
+                            <ul class="features">
+                                <li><span class="tick">✔</span><span>Profit &amp; loss, balance sheet, trial balance and general ledger included.</span></li>
+                                <li><span class="tick">✔</span><span>We evaluate work to ensure it meets our standards.</span></li>
+                                <li><span class="tick">✔</span><span>Full reports package with expert review.</span></li>
+                            </ul>
+                            <div class="price-wrap">
+                                <div class="price">$150 <small>/mo</small></div>
+                                <div class="note">One-time fee. Prices may vary depending on number of months needed.</div>
+                                <button class="cta-expert" onclick="consult()">Get a free consultation</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: ENLARGED cleanup info card -->
+                <div class="col-lg-6 d-flex">
+                    <div class="cleanup-info">
+                        <h3>One time cleanup of your books</h3>
+                        <p class="lead-text">Let our team of bookkeeping experts ensure your books are accurate for peace of mind filing taxes, managing your books, or applying for loans.</p>
+
+                        <div class="subhead">How Live Expert Cleanup works</div>
+
+                        <!-- Step 1: Schedule a call -->
+                        <div class="step-item">
+                            <div class="step-icon">
+                                <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/icons/icon-call-black.svg" alt="Call icon">
+                            </div>
+                            <div class="step-content">
+                                <h4>Schedule a call</h4>
+                                <p>Set up an appointment with a Live bookkeeper and be ready to sign in to QuickBooks before you call. Your first session will take about 90 minutes.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Upload your docs -->
+                        <div class="step-item">
+                            <div class="step-icon">
+                                <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/icons/icon-upload-black.svg" alt="Upload icon">
+                            </div>
+                            <div class="step-content">
+                                <h4>Upload your docs</h4>
+                                <p>Your bookkeeper will ask you to upload the right business and financial documents to get started with your cleanup.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Finishing your cleanup -->
+                        <div class="step-item">
+                            <div class="step-icon">
+                                <img src="https://digitalasset.intuit.com/render/content/dam/intuit/sbseg/en_us/quickbooks-online/web/icons/icon-file-search-black.svg" alt="File search icon">
+                            </div>
+                            <div class="step-content">
+                                <h4>Finishing your cleanup</h4>
+                                <p>A bookkeeping team will organize your accounts, review and categorize transactions, and prepare your reports for review.</p>
+                            </div>
+                        </div>
+
+                        <!-- Consultation Form -->
+                        <div class="consult-form">
+                            <h4>Schedule a free consultation</h4>
+                            <form id="consultForm" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Full Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Email Address" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" class="form-control" placeholder="Phone Number" required>
+                                </div>
+                                <button type="submit" class="btn-submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIALS SECTION ========== -->
+    <section class="py-5" id="testimonials">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="section-title">What Our Customers Say</h2>
+                    <p class="lead">Thousands of businesses trust us with their QuickBooks data support</p>
+                </div>
+            </div>
+            
+            <!-- Featured testimonial (unchanged) -->
+            <div class="featured-testimonial">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <div class="testimonial-content">
+                            <p>Forecasting has been really helpful. It'll show me trends last quarter's or last year's sales. Just being able to see the graphs and the charts has been really helpful. The insights we've gained from the data recovery tools have transformed how we approach our financial planning and budgeting processes.</p>
+                            <div class="testimonial-author">
+                                <div>
+                                    <h5>Laura Adekoya</h5>
+                                    <p>Owner of Fleurs et Sel</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="testimonial-image">
+                            <img src="https://i.ibb.co/4nPZc1x2/fleurs-et-sel-ecommerce-2184-brand-photo-25-isolated-4-removebg-preview.png" alt="Laura Adekoya" style="width: 100%; max-width: 350px; border-radius: 20px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Marquee testimonials -->
+            <div class="marquee-wrapper">
+                <div class="marquee-content">
+                    <!-- Original cards (duplicated for seamless loop) -->
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">MS</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Michael Stevens</h5>
+                                <small class="text-muted">CFO, Tech Solutions Inc.</small>
+                            </div>
+                        </div>
+                        <p>The automated backup solution saved us during a server crash. We were back up and running in hours instead of days. Highly recommend their service!</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">SJ</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Julie James</h5>
+                                <small class="text-muted">Main Street Iowa, LLC</small>
+                            </div>
+                        </div>
+                        <p>I was panicking when my QuickBooks file wouldn't open. Their emergency support had me back in business the same day. Worth every penny!</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-info rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">RD</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Robert Davis</h5>
+                                <small class="text-muted">Accounting Manager</small>
+                            </div>
+                        </div>
+                        <p>The proactive monitoring caught an issue before it became a disaster. Their team resolved it quickly without any downtime.</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <!-- Duplicate set for seamless loop -->
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">MS</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Michael Stevens</h5>
+                                <small class="text-muted">CFO, Tech Solutions Inc.</small>
+                            </div>
+                        </div>
+                        <p>The automated backup solution saved us during a server crash. We were back up and running in hours instead of days. Highly recommend their service!</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">SJ</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Julie James</h5>
+                                <small class="text-muted">Main Street Iowa, LLC</small>
+                            </div>
+                        </div>
+                        <p>I was panicking when my QuickBooks file wouldn't open. Their emergency support had me back in business the same day. Worth every penny!</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-info rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold">RD</span>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0">Robert Davis</h5>
+                                <small class="text-muted">Accounting Manager</small>
+                            </div>
+                        </div>
+                        <p>The proactive monitoring caught an issue before it became a disaster. Their team resolved it quickly without any downtime.</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA SECTION ========== -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <h2 class="mb-4">Don't Risk Your Financial Data</h2>
+                    <p class="lead mb-4">Protect your business from QuickBooks data disasters with our expert recovery and protection services.</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="#demos" class="btn btn-light btn-lg">Get Protected Now</a>
+                        <a href="#demos" class="btn btn-outline-light btn-lg">See How It Works</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5><img src="https://i.ibb.co/d4DTVY62/Chat-GPT-Image-Nov-4-2025-04-01-58-AM-removebg-preview.png" alt="QB Data Shield" style="height: 50px;"></h5>
+                    <p class="text-white-50">Expert QuickBooks data protection, recovery, and emergency support services.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Services</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#features">Data Recovery</a></li>
+                        <li class="mb-2"><a href="#features">File Repair</a></li>
+                        <li class="mb-2"><a href="#features">Expert Support</a></li>
+                        <li class="mb-2"><a href="#features">Backup Solutions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">About Us</a></li>
+                        <li class="mb-2"><a href="#">Careers</a></li>
+                        <li class="mb-2"><a href="#">Press</a></li>
+                        <li class="mb-2"><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Resources</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Blog</a></li>
+                        <li class="mb-2"><a href="#">Help Center</a></li>
+                        <li class="mb-2"><a href="#">Webinars</a></li>
+                        <li class="mb-2"><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Privacy</a></li>
+                        <li class="mb-2"><a href="#">Terms</a></li>
+                        <li class="mb-2"><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top pt-4 mt-4 text-center">
+                <p class="mb-0 text-white-50">&copy; 2023 QB Data Shield. All rights reserved. QuickBooks is a registered trademark of Intuit Inc.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== PRICING MODAL ========== -->
+    <div class="modal fade" id="pricingModal" tabindex="-1" aria-labelledby="pricingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pricingModalLabel">QuickBooks Data Protection Pricing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="pricing-modal-body">
+                    <div id="pricing-root-modal"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- File Health Check JS (unchanged) -->
+    <script>
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // File Health Check variables and functions (exactly as original)
+        const questionSection = document.getElementById('question-section');
+        const uploadSection = document.getElementById('upload-section');
+        const resultSection = document.getElementById('result-section');
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const scanningState = document.getElementById('scanning-state');
+        const resultState = document.getElementById('result-state');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const fileNameDisplay = document.getElementById('file-name-display');
+
+        const q1Wrapper = document.getElementById('q1-wrapper');
+        const q2Wrapper = document.getElementById('q2-wrapper');
+        const q3Wrapper = document.getElementById('q3-wrapper');
+
+        const next1Btn = document.getElementById('next1-btn');
+        const next2Btn = document.getElementById('next2-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const back1Btn = document.getElementById('back1-btn');
+        const back2Btn = document.getElementById('back2-btn');
+
+        const questionProgress = document.getElementById('question-progress');
+        const currentStepText = document.getElementById('current-step');
+        const percentText = document.getElementById('percent-text');
+
+        let currentQuestion = 1;
+        let answers = {};
+
+        function showQuestion(num) {
+            [q1Wrapper, q2Wrapper, q3Wrapper].forEach((q, i) => {
+                q.classList.remove('active');
+            });
+            document.getElementById(`q${num}-wrapper`).classList.add('active');
+
+            currentStepText.textContent = num;
+            const percent = ((num - 1) / 3) * 100;
+            questionProgress.style.width = `${percent}%`;
+            percentText.textContent = `${Math.round(percent)}%`;
+        }
+
+        function checkAnswer(questionName, nextBtn) {
+            const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+            nextBtn.disabled = !selected;
+            if (selected) {
+                answers[questionName] = selected.value;
+            }
+        }
+
+        document.querySelectorAll('input[name="q1"]').forEach(radio => {
+            radio.addEventListener('change', () => checkAnswer('q1', next1Btn));
+        });
+
+        document.querySelectorAll('input[name="q2"]').forEach(radio => {
+            radio.addEventListener('change', () => checkAnswer('q2', next2Btn));
+        });
+
+        document.querySelectorAll('input[name="q3"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                continueBtn.disabled = false;
+            });
+        });
+
+        next1Btn.addEventListener('click', () => {
+            currentQuestion = 2;
+            showQuestion(2);
+            if (answers.q2) {
+                document.querySelector(`input[name="q2"][value="${answers.q2}"]`).checked = true;
+                next2Btn.disabled = false;
+            }
+        });
+
+        next2Btn.addEventListener('click', () => {
+            currentQuestion = 3;
+            showQuestion(3);
+            if (answers.q3) {
+                document.querySelector(`input[name="q3"][value="${answers.q3}"]`).checked = true;
+                continueBtn.disabled = false;
+            }
+        });
+
+        back1Btn.addEventListener('click', () => {
+            currentQuestion = 1;
+            showQuestion(1);
+            if (answers.q1) {
+                document.querySelector(`input[name="q1"][value="${answers.q1}"]`).checked = true;
+                next1Btn.disabled = false;
+            }
+        });
+
+        back2Btn.addEventListener('click', () => {
+            currentQuestion = 2;
+            showQuestion(2);
+            if (answers.q2) {
+                document.querySelector(`input[name="q2"][value="${answers.q2}"]`).checked = true;
+                next2Btn.disabled = false;
+            }
+        });
+
+        continueBtn.addEventListener('click', () => {
+            answers.q3 = document.querySelector('input[name="q3"]:checked').value;
+            questionSection.style.display = 'none';
+            uploadSection.style.display = 'block';
+            dropZone.classList.add('enabled');
+        });
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+            dropZone.addEventListener(event, e => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        ['dragenter', 'dragover'].forEach(event => {
+            dropZone.addEventListener(event, () => dropZone.classList.add('dragover'));
+        });
+
+        ['dragleave', 'drop'].forEach(event => {
+            dropZone.addEventListener(event, () => dropZone.classList.remove('dragover'));
+        });
+
+        dropZone.addEventListener('drop', e => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) startScan(files[0]);
+        });
+
+        fileInput.addEventListener('change', e => {
+            if (e.target.files.length > 0) startScan(e.target.files[0]);
+        });
+
+        dropZone.addEventListener('click', () => {
+            if (dropZone.classList.contains('enabled')) fileInput.click();
+        });
+
+        function startScan(file) {
+            uploadSection.style.display = 'none';
+            resultSection.style.display = 'block';
+            scanningState.style.display = 'block';
+            resultState.style.display = 'none';
+
+            fileNameDisplay.textContent = `File: ${file.name} • Size: ${(file.size / 1024).toFixed(1)} KB • Type: QuickBooks Company File`;
+
+            const minDuration = 30000;
+            const maxDuration = 40000;
+            const scanDuration = Math.random() * (maxDuration - minDuration) + minDuration;
+            const startTime = Date.now();
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                progress = Math.min((elapsed / scanDuration) * 100, 100);
+
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `${Math.round(progress)}%`;
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(showResult, 800);
+                }
+            }, 200);
+        }
+
+        function showResult() {
+            scanningState.style.display = 'none';
+            resultState.style.display = 'block';
+        }
+
+        function resetUpload() {
+            questionSection.style.display = 'block';
+            uploadSection.style.display = 'none';
+            resultSection.style.display = 'none';
+            fileInput.value = '';
+            progressFill.style.width = '0%';
+            progressText.textContent = '0%';
+
+            currentQuestion = 1;
+            answers = {};
+            showQuestion(1);
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            next1Btn.disabled = true;
+            next2Btn.disabled = true;
+            continueBtn.disabled = true;
+            dropZone.classList.remove('enabled');
+        }
+
+        showQuestion(1);
+        next1Btn.disabled = true;
+        next2Btn.disabled = true;
+        continueBtn.disabled = true;
+
+        // Consultation function for the new card button
+        function consult() {
+            alert('Thanks — we\'ll reach out to schedule your free consultation.');
+        }
+    </script>
+
+    <!-- React Pricing Calculator (unchanged) -->
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        function QbPricingCalculator() {
+            const DATA = {
+                products: [
+                    { id: "simple", label: "QuickBooks Simple Start", type: "online", monthly: 38, oneTimeSupport: 299 },
+                    { id: "essentials", label: "QuickBooks Essentials", type: "online", monthly: 40, oneTimeSupport: 299, support1yrNoPayroll: 399, support8yrNoPayroll: 899 },
+                    { id: "plus", label: "QuickBooks Plus", type: "online", monthly: 70, oneTimeSupport: 299, support1yr: { none: 499, core: 549, premium: 549, elite: 599 }, support3yr: { none: 1119, core: 1499, premium: 2149, elite: 2849 }, support8yrNoPayroll: 2099 },
+                    { id: "desktop_pro", label: "QuickBooks Desktop Pro", type: "desktop", yearly: 650, oneTimeSupport: 299, perUserSupport: 69 },
+                    { id: "desktop_premier", label: "QuickBooks Desktop Premier", type: "desktop", yearly: 650, oneTimeSupport: 399, perUserSupport: 69, support1yr: 599, support3yr: 1019, support8yr: 2119 },
+                    { id: "enterprise", label: "QuickBooks Desktop Enterprise (Gold)", type: "desktop", yearly: 1464, oneTimeSupport: 599, perUserSupport: 119, support1yr: 899, support3yr: 1999, support8yr: 3449 },
+                ],
+                payrolls: [
+                    { id: "none", label: "No Payroll", monthly: 0 },
+                    { id: "core", label: "Payroll Core", monthly: 50 },
+                    { id: "premium", label: "Payroll Premium", monthly: 88 },
+                    { id: "elite", label: "Payroll Elite", monthly: 134 },
+                ],
+                durations: [
+                    { id: "1yr", label: "1 year", multiplier: 1.0 },
+                    { id: "3yr", label: "3 years", multiplier: 0.92 },
+                    { id: "8yr", label: "5 + 3 years (8 yrs)", multiplier: 0.85 },
+                    { id: "one_time", label: "One-time", multiplier: 1.0 },
+                ],
+                userOptions: Array.from({ length: 10 }, (_, i) => i + 1),
+            };
+
+            const [productId, setProductId] = useState(DATA.products[0].id);
+            const [payrollId, setPayrollId] = useState(DATA.payrolls[0].id);
+            const [durationId, setDurationId] = useState(DATA.durations[0].id);
+            const [userCount, setUserCount] = useState(1);
+
+            const product = useMemo(() => DATA.products.find(p => p.id === productId), [productId]);
+            const payroll = useMemo(() => DATA.payrolls.find(p => p.id === payrollId), [payrollId]);
+            const duration = useMemo(() => DATA.durations.find(d => d.id === durationId), [durationId]);
+            const isOneTime = duration?.id === "one_time";
+            const isOnline = product?.type === "online";
+            const isDesktop = product?.type === "desktop";
+            const showUser = isDesktop && !isOneTime;
+
+            const breakdown = useMemo(() => {
+                let total = 0, support = 0, final = 0;
+
+                if (isOneTime) {
+                    support = product.oneTimeSupport;
+                    if (isDesktop && userCount > 1) {
+                        support += (userCount - 1) * product.perUserSupport;
+                    }
+                    total = support;
+                    final = support;
+                    return { total, support, final, months: 0 };
+                }
+
+                if (isOnline) {
+                    const months = duration.id === "1yr" ? 12 : duration.id === "3yr" ? 36 : 96;
+                    const combinedMonthly = product.monthly + payroll.monthly;
+                    total = Math.round(combinedMonthly * months * duration.multiplier);
+
+                    if (duration.id === "1yr" && product.id === "plus") {
+                        support = product.support1yr[payroll.id] || 599;
+                    }
+                    else if (duration.id === "3yr" && product.id === "plus") {
+                        support = product.support3yr[payroll.id] || 599;
+                    }
+                    else if (duration.id === "8yr" && payroll.id === "none") {
+                        if (product.id === "essentials") {
+                            support = product.support8yrNoPayroll;
+                        } else if (product.id === "plus") {
+                            support = product.support8yrNoPayroll;
+                        } else {
+                            support = 299 + 400;
+                        }
+                    }
+                    else if (duration.id === "1yr" && product.id === "essentials" && payroll.id === "none") {
+                        support = product.support1yrNoPayroll;
+                    }
+                    else {
+                        support = payroll.id === "none" ? 299 : 599;
+                        if (duration.id === "3yr") support += 300;
+                        if (duration.id === "8yr") support += 400;
+                    }
+                } 
+                else if (isDesktop) {
+                    const years = duration.id === "1yr" ? 1 : duration.id === "3yr" ? 3 : 8;
+                    const baseYearly = product.yearly + (payroll.monthly * 12);
+                    const userCost = (userCount - 1) * product.perUserSupport;
+                    total = Math.round((baseYearly + userCost) * years * duration.multiplier);
+
+                    let baseSupport = 0;
+                    if (product.id === "enterprise") {
+                        baseSupport = duration.id === "1yr" ? product.support1yr :
+                                    duration.id === "3yr" ? product.support3yr :
+                                    product.support8yr;
+                    } else if (product.id === "desktop_premier") {
+                        baseSupport = duration.id === "1yr" ? product.support1yr :
+                                    duration.id === "3yr" ? product.support3yr :
+                                    product.support8yr;
+                    } else {
+                        baseSupport = duration.id === "1yr" ? 499 :
+                                    duration.id === "3yr" ? (product.id === "desktop_pro" ? 799 : 899) :
+                                    (product.id === "desktop_pro" ? 1499 : 1499);
+                    }
+                    support = baseSupport + ((userCount - 1) * product.perUserSupport * years);
+                }
+
+                final = support;
+                return { total, support, final, months: duration.id === "1yr" ? 12 : duration.id === "3yr" ? 36 : 96 };
+            }, [product, payroll, duration, isOneTime, isDesktop, userCount]);
+
+            function formatMoney(n) {
+                return n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+            }
+
+            return (
+                <div className="min-h-screen bg-gray-50 py-12 px-4">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="bg-white p-6 rounded-2xl shadow-md">
+                            <div className="flex items-start justify-between gap-6">
+                                <div>
+                                    <h1 className="text-2xl font-semibold text-gray-800">QuickBooks — Data Protection Pricing</h1>
+                                    <p className="mt-1 text-sm text-gray-500">Select edition, payroll, duration, and users to see accurate support pricing.</p>
+                                </div>
+                            </div>
+                            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-4">
+                                    <label className="block">
+                                        <div className="text-sm font-medium text-gray-700">Product / Edition</div>
+                                        <select value={productId} onChange={(e) => { setProductId(e.target.value); setUserCount(1); }} className="mt-2 w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-indigo-200">
+                                            {DATA.products.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                                        </select>
+                                    </label>
+                                    <label className="block opacity-50" aria-hidden={isOneTime}>
+                                        <div className="text-sm font-medium text-gray-900">Payroll Version</div>
+                                        <select value={payrollId} onChange={(e) => setPayrollId(e.target.value)} disabled={isOneTime} className={`mt-2 w-full p-3 border rounded-lg focus:ring-2 ${isOneTime ? "bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed" : "bg-white focus:ring-indigo-200"}`}>
+                                            {DATA.payrolls.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
+                                        </select>
+                                    </label>
+                                    <label className="block">
+                                        <div className="text-sm font-medium text-gray-700">Duration / Plan</div>
+                                        <select value={durationId} onChange={(e) => setDurationId(e.target.value)} className="mt-2 w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-indigo-200">
+                                            {DATA.durations.map(d => <option key={d.id} value={d.id}>{d.label}</option>)}
+                                        </select>
+                                    </label>
+                                    {showUser && (
+                                        <label className="block">
+                                            <div className="text-sm font-medium text-gray-700">Number of Users</div>
+                                            <select value={userCount} onChange={(e) => setUserCount(parseInt(e.target.value))} className="mt-2 w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-indigo-200">
+                                                {DATA.userOptions.map(n => <option key={n} value={n}>{n} user{n > 1 ? 's' : ''}</option>)}
+                                            </select>
+                                        </label>
+                                    )}
+                                    {isOneTime && <div className="mt-3 text-sm text-gray-500 italic">Payroll and multi-user not applicable for one-time support.</div>}
+                                </div>
+                                <div className="bg-gray-50 p-4 rounded-lg border">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <div className="text-xs text-gray-500">Summary</div>
+                                            <div className="text-lg font-semibold text-gray-800 mt-1">{product.label}</div>
+                                        </div>
+                                        <div className="text-sm text-gray-500">{isOneTime ? "One-time" : `${duration.label}${showUser ? ` • ${userCount} user${userCount > 1 ? 's' : ''}` : ''}`}</div>
+                                    </div>
+                                    <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-700">
+                                        {isOnline && !isOneTime && (
+                                            <>
+                                                <div>Base monthly</div><div className="text-right font-medium">{formatMoney(product.monthly)}/mo</div>
+                                                <div>Payroll monthly</div><div className="text-right">{formatMoney(payroll.monthly)}/mo</div>
+                                                <div>Combined monthly</div><div className="text-right font-medium">{formatMoney(product.monthly + payroll.monthly)}/mo</div>
+                                            </>
+                                        )}
+                                        {isDesktop && !isOneTime && (
+                                            <>
+                                                <div>Base yearly</div><div className="text-right font-medium">{formatMoney(product.yearly)}/yr</div>
+                                                <div>Payroll yearly</div><div className="text-right">{formatMoney(payroll.monthly * 12)}/yr</div>
+                                                <div>Per extra user</div><div className="text-right">{formatMoney(product.perUserSupport)}/user/yr</div>
+                                            </>
+                                        )}
+                                        <div>Duration</div><div className="text-right">{isOneTime ? "—" : `${breakdown.months} months`}</div>
+                                        <div className="pt-3">Total for duration</div><div className="pt-3 text-right text-gray-800">{formatMoney(breakdown.total)}</div>
+                                        <div className="text-sm">Support price</div><div className="text-right font-semibold text-green-600">{formatMoney(breakdown.support)}</div>
+                                        <div className="text-sm">One-time support</div><div className="text-right text-gray-800">{isOneTime ? formatMoney(breakdown.support) : formatMoney(0)}</div>
+                                        <div className="pt-4 text-lg font-semibold">Final price</div><div className="pt-4 text-right text-3xl text-emerald-700 font-extrabold">{formatMoney(breakdown.final)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-6 text-xs text-gray-500">Prices exclude taxes. Multi-user pricing applies to support only. Contact sales for custom quotes.</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        window.showPricingCalculator = function() {
+            const modalContainer = document.getElementById('pricing-root-modal');
+            modalContainer.innerHTML = '';
+            const root = ReactDOM.createRoot(modalContainer);
+            root.render(<QbPricingCalculator />);
+            const modalElement = document.getElementById('pricingModal');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        };
+    </script>
+
+    <script>
+        // Attach click handler to "Activate the IDP" button
+        const originalShowResult = showResult;
+        window.showResult = function() {
+            originalShowResult.call(this);
+            const idpBtn = document.getElementById('activate-idp-btn');
+            if (idpBtn) {
+                idpBtn.onclick = function(e) {
+                    e.preventDefault();
+                    if (window.showPricingCalculator) {
+                        window.showPricingCalculator();
+                    }
+                };
+            }
+        }.bind(this);
+        window.showResult = showResult;
+    </script>
+</body>
+</html>
